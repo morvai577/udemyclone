@@ -1,7 +1,8 @@
 // Variables
 
 const courses = document.querySelector('#courses-list'),
-    shoppingCartContent = document.querySelector('#cart-content tbody');
+    shoppingCartContent = document.querySelector('#cart-content tbody'),
+    clearCartBtn = document.querySelector('#clear-cart');
 
 // Listeners
 
@@ -10,6 +11,12 @@ loadEventListeners();
 function loadEventListeners() {
     // When a new course is added
     courses.addEventListener('click', buyCourse);
+
+    // When the remove button is clicked
+    shoppingCartContent.addEventListener('click', removeCourse)
+
+    // Clear Cart Btn
+    clearCartBtn.addEventListener('click', clearCart);
 }
 
 // Functions
@@ -51,7 +58,7 @@ function addIntoCart(course) {
     row.innerHTML = `
         <tr>
             <td>
-                <img src="${course.image}"
+                <img src="${course.image}" width=100px>
             </td>
             <td>${course.title}</td>
             <td>${course.price}</td>
@@ -61,6 +68,22 @@ function addIntoCart(course) {
         </tr>
     `;
 
-    // Add into the shhopping cart
+    // Add into the shopping cart
     shoppingCartContent.appendChild(row);
+}
+
+// Remove course from the dom
+function removeCourse(e) {
+
+    if (e.target.classList.contains('remove')) {
+        e.target.parentElement.parentElement.remove();
+    }
+}
+
+// Clears the shopping cart
+function clearCart() {
+
+    while(shoppingCartContent.firstChild) {
+        shoppingCartContent.removeChild(shoppingCartContent.firstChild);
+    }
 }
