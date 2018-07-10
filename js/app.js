@@ -108,9 +108,33 @@ function getCourseFromStorage() {
 // Remove course from the dom
 function removeCourse(e) {
 
+    let course, courseId;
+
     if (e.target.classList.contains('remove')) {
         e.target.parentElement.parentElement.remove();
+        course = e.target.parentElement.parentElement;
+        courseId = course.querySelector('a').getAttribute('data-id');
     }
+
+    // remove from the local storage
+    removeCourseLocalStorage(courseId);
+
+}
+
+function removeCourseLocalStorage(courseId) {
+    // get data from local storage
+    let coursesLS = getCourseFromStorage();
+
+    // loop through list and find index index to remove
+    coursesLS.forEach(function(courseLS, index){
+        if (courseLS.id === courseId) {
+            coursesLS.splice(index,1);
+        }
+    });
+
+    // Add the rest of the array
+    localStorage.setItem('courses', JSON.stringify(coursesLS));
+
 }
 
 // Clears the shopping cart
@@ -119,6 +143,14 @@ function clearCart() {
     while(shoppingCartContent.firstChild) {
         shoppingCartContent.removeChild(shoppingCartContent.firstChild);
     }
+
+    // Clear from local storage
+    clearLocalStorage();
+}
+
+// Clears the whole local storage
+function clearLocalStorage() {
+    localStorage.clear();
 }
 
 // Loads when doc is ready and prints courses into shopping cart
